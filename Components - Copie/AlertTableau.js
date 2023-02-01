@@ -26,23 +26,15 @@ import { visuallyHidden } from '@mui/utils';
 import Image from "next/image";
 import Button from "@mui/material/Button";
 import {Backdrop, Card, Chip, CircularProgress, Stack} from "@mui/material";
-import {blue, green, grey, orange, red, yellow} from "@mui/material/colors";
-import Add from "../AddArticle";
-import ArticleDialog from "../ArticleDiable";
+import {blue, grey, red, yellow} from "@mui/material/colors";
 import {useRouter} from "next/router";
-import url from "../global";
 import axios from "axios";
-import {useContext, useEffect, useState} from "react";
-import Circular from "../Circular";
-import ErrorPage from "../ErrorPage";
+import {useContext, useState} from "react";
+
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
-import RetirerDialog from "../RetirerDialog";
-import AjouterDialog from "../AjouterDialog";
-import MyDialog from "../Dialog";
-import MyRequest from "../request";
-import addShapshap from "./AddCarte";
-import AjouterUnShapshap from "./AddCarte";
-import {UserContext} from "../../Context/GlobalContext";
+import Circular from "./Circular";
+import url from "./global";
+import {UserContext} from "../Context/GlobalContext";
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -78,14 +70,38 @@ const headCells = [
         id: 'name',
         numeric: true,
         disablePadding: true,
-        label: 'Prix',
+        label: 'Image',
+    },
+    {
+        id: 'calories',
+        numeric: true,
+        disablePadding: false,
+        label: 'Nom',
+    },
+    {
+        id: 'carbs',
+        numeric: true,
+        disablePadding: false,
+        label: "Prix d'Achat",
     },
     {
         id: 'protein',
         numeric: true,
         disablePadding: false,
-        label: "Date",
+        label: "Prix de vente",
     },
+    {
+        id: 'vendue',
+        numeric: true,
+        disablePadding: false,
+        label: "Nombre vendue",
+    }, {
+        id: 'restant',
+        numeric: true,
+        disablePadding: false,
+        label: "Restant",
+    },
+
 
 ];
 
@@ -95,21 +111,24 @@ function EnhancedTableHead(props) {
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
+    const {user,setUser}=useContext(UserContext)
+
 
     return (
         <TableHead>
             <TableRow>
-                <TableCell padding="checkbox">
-                    <Checkbox
-                        color="primary"
-                        indeterminate={numSelected > 0 && numSelected < rowCount}
-                        checked={rowCount > 0 && numSelected === rowCount}
-                        onChange={onSelectAllClick}
-                        inputProps={{
-                            'aria-label': 'select all desserts',
-                        }}
-                    />
-                </TableCell>
+                {user===2?
+                    <TableCell padding="checkbox">
+                        <Checkbox
+                            color="primary"
+                            indeterminate={numSelected > 0 && numSelected < rowCount}
+                            checked={rowCount > 0 && numSelected === rowCount}
+                            onChange={onSelectAllClick}
+                            inputProps={{
+                                'aria-label': 'select all desserts',
+                            }}
+                        />
+                    </TableCell>:null}
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id}
@@ -131,6 +150,10 @@ function EnhancedTableHead(props) {
                         </TableSortLabel>
                     </TableCell>
                 ))}
+
+                {user===2?
+                    <TableCell> </TableCell>:null
+                }
             </TableRow>
         </TableHead>
     );
@@ -145,29 +168,27 @@ EnhancedTableHead.propTypes = {
     rowCount: PropTypes.number.isRequired,
 };
 
-function EnhancedTableToolbar(props,{type}) {
+function EnhancedTableToolbar(props) {
     const router=useRouter();
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(false)
-    const {user,setUser}=useContext(UserContext)
-
 
     const refreshData=()=>{
-        type==="canal"?router.push("/canal/dashboard"):router.push("/shapshap/dashboard")
+        router.replace(router.asPath)
     }
     const { numSelected } = props;
     var data=Object.values(numSelected);
     console.log(data)
     const removeSelect = async () => {
         setLoading(true)
-        await MyRequest('shapcanals/1',   'DELETE', {"data":data}, { 'Content-Type':'application/json' })
-            .then(async (response) => {
-                if (response.status === 200) {
+        const res = await axios.post(url + '/api/articles/delect', {"data":data})
+            .then(function (response) {
+                if(response.status===200){
                     numSelected.length=0
                     refreshData();
-
                 }
-            }).finally(()=> {
+            })
+            .finally(()=> {
                 setLoading(false)
             }).catch(()=>setError(true))
     };
@@ -206,11 +227,11 @@ function EnhancedTableToolbar(props,{type}) {
                         id="tableTitle"
                         component="div"
                     >
-                        {props.type}
+                        Articles
                     </Typography>
                 )}
 
-                {user===2?numSelected.length > 0 ? (
+                {numSelected.length > 0 ? (
                     <Tooltip title="Suprimer">
                         <IconButton onClick={() => removeSelect()}>
                             <DeleteIcon/>
@@ -222,8 +243,7 @@ function EnhancedTableToolbar(props,{type}) {
                             <FilterListIcon/>
                         </IconButton>
                     </Tooltip>
-                ):null
-                }
+                )}
             </Toolbar>
         );
     }
@@ -232,10 +252,9 @@ function EnhancedTableToolbar(props,{type}) {
 EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
-export default function AjouterCarteTable({type}) {
-    const refreshData=()=>{
-        router.replace("shapshap/ajoute")
-    }
+export default function AlertTableau({rows}) {
+    const router = useRouter()
+
 
     const [order, setOrder] = React.useState('desc');
     const [open, setOpen] = React.useState(false);
@@ -247,42 +266,6 @@ export default function AjouterCarteTable({type}) {
     const [loading, setLoading] = useState(false)
     const [remove, setRemove] = useState(null)
     const [add, setAdd] = useState(null)
-    const Submitremove = async (id) => {
-        setLoading(true)
-        const res = await axios.post(url + '/api/articles/remove/'+id, {"remove":remove})
-            .then(function (response) {
-                if(response.status===200){
-                    refreshData();
-                }
-            })
-            .finally(()=> {
-                setLoading(false)
-            }).catch(()=>setLoading(true))
-    };
-    const Submitadd = async (id) => {
-        setLoading(true)
-        const res = await axios.post(url + '/api/articles/remove/'+id, {"remove":add})
-            .then(function (response) {
-                if(response.status===200){
-                    refreshData();
-                }
-            })
-            .finally(()=> {
-                setLoading(false)
-            }).catch(()=>setLoading(true))
-    };
-    const [rows, setData] = useState([]);
-    const router = useRouter();
-    useEffect(() => {
-        const fetchData = async () => {
-            await MyRequest('shapcanals?type='+type, 'GET', {}, { 'Content-Type': 'application/json' })
-                .then((response) => {
-                    setData(response.data)
-
-                });
-        };
-        fetchData();
-    }, []);
 
 
 
@@ -339,30 +322,22 @@ export default function AjouterCarteTable({type}) {
     }
 
     const isSelected = (name) => selected.indexOf(name) !== -1;
+    const {user,setUser}=useContext(UserContext)
 
     // Avoid a layout jump when reaching the last page with empty rows.
     const emptyRows =
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
     if (loading) {
         return (
-                <Circular/>
+            <Circular/>
         )
     } else {
         return (
             <Box sx={{margin: 1, boxShadow: 2}}>
-                <Paper sx={{width: '100%', mb: 2,background:type==="orange"?orange[700]:type==="airtel"?red[700]:green[700]}}>
-                    <EnhancedTableToolbar numSelected={selected} type={type}/>
+                <Paper sx={{width: '100%', mb: 2,backgroundColor:red[400]}}>
                     <TableContainer>
-                        <MyDialog
-                            bacground={type==="orange"?orange[200]:type==="airtel"?red[200]:green[200]}
-                        text={"Ajouter"}
-                        description={"Ajouter  credit "+type}
-                        content={<AjouterUnShapshap type={type}/>}
-
-                        />
-
                         <Table
-                            sx={{minWidth: 200}}
+                            sx={{minWidth: 950}}
                             aria-labelledby="tableTitle"
                             size={dense ? 'small' : 'medium'}
                         >
@@ -382,21 +357,25 @@ export default function AjouterCarteTable({type}) {
                                     .map((row, index) => {
                                         const isItemSelected = isSelected(row.id);
                                         const labelId = `enhanced-table-checkbox-${index}`;
-                                        const fullDate = row.created_at;
-                                        const date = new Date(fullDate);
-                                        const shortDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()} ${date.getHours()}h:${date.getMinutes()}:${date.getSeconds()}`;
 
                                         return (
                                             <TableRow
                                                 hover
-                                                onClick={(event) => handleClick(event, row.id)}
+                                                onClick={(event) => {
+                                                    user===2? handleClick(event, row.id):null
+                                                }}
+                                                // onDoubleClick={() => {
+                                                //     setLoading(true)
+                                                //     router.push("/articles/" + row.id)
+                                                //
+                                                // }}
                                                 role="checkbox"
                                                 aria-checked={isItemSelected}
                                                 tabIndex={-1}
                                                 key={row.id}
                                                 selected={isItemSelected}
                                             >
-                                                <TableCell padding="checkbox">
+                                                {user===2?<TableCell padding="checkbox">
                                                     <Checkbox
                                                         color="primary"
                                                         checked={isItemSelected}
@@ -404,9 +383,22 @@ export default function AjouterCarteTable({type}) {
                                                             'aria-labelledby': labelId,
                                                         }}
                                                     />
+                                                </TableCell>:null}
+                                                <TableCell
+                                                    align="right"
+                                                >
+                                                    <img
+                                                        src={url + "/storage/article/" + row.image}
+                                                        width={70} height={70}
+                                                        alt={"image"}/>
                                                 </TableCell>
-                                                <TableCell align="right">{row.prix} CFA</TableCell>
-                                                <TableCell align="right">{shortDate}</TableCell>
+                                                <TableCell align="right">{row.nom}</TableCell>
+                                                <TableCell align="right">
+                                                    {row.prixAchat} CFA
+                                                </TableCell>
+                                                <TableCell align="right">{row.prixVente} CFA</TableCell>
+                                                <TableCell align="right">{row.vendue}</TableCell>
+                                                <TableCell align="right">{row.stock}</TableCell>
                                             </TableRow>
                                         );
                                     })}
