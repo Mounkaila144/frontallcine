@@ -43,7 +43,7 @@ export default function CategorieCard({categories}) {
                 sx={{}}
             >
                 <Link href={`/categorie/${categories.id}`}>
-                    <img 
+                    <Image
                         src={url + "/storage/categorie/" +categories.image}
                         width={190} height={190}
                         alt={categories.nom}/>

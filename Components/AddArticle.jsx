@@ -25,11 +25,10 @@ const FormData = require('form-data');
 
 export default function Add({id}) {
     const [nom, createNom] = useState("rrr")
-    const [prixAchat, createPrixAchat] = useState(0)
-    const [prixVente, createPrixVente] = useState(0)
-    const [stock, createStock] = useState(0)
-    const [alert, createAlert] = useState(0)
-    const [vendue, createVendue] = useState(0)
+    const [prixAchat, createPrixAchat] = useState(1)
+    const [prixVente, createPrixVente] = useState(5)
+    const [stock, createStock] = useState(5)
+    const [vendue, createVendue] = useState(6)
     const [image, createimage] = useState([])
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(false)
@@ -55,7 +54,6 @@ export default function Add({id}) {
         formData.append('prixAchat', prixAchat);
         formData.append('prixVente', prixVente);
         formData.append('stock', stock);
-        formData.append('alert', alert);
         formData.append('vendue', vendue);
         formData.append('image', image);
         formData.append('categorie_id', id);
@@ -159,28 +157,6 @@ export default function Add({id}) {
                             id="Quantité"
                             onChange={(event) => {
                                 createStock(parseInt(event.target.value))
-                            }}
-                            aria-describedby="nom"
-                            inputProps={{
-                                'type': "number",
-                                'min': "0",
-                                'max': "1000",
-                                'aria-label': 'weight',
-                            }}
-                        />
-                    </FormControl>
-                    <FormControl sx={{m: 1, width: '15ch'}} variant="outlined">
-                        <FormHelperText id="Quantité">
-                            <Typography component="h3" sx={{fontSize: 23}} variant="h5">
-                                Alert
-                            </Typography>
-                        </FormHelperText>
-
-                        <OutlinedInput
-                            sx={{height: '5ch', boxShadow: 3, borderRadius: 2}}
-                            id="Alert"
-                            onChange={(event) => {
-                                createAlert(parseInt(event.target.value))
                             }}
                             aria-describedby="nom"
                             inputProps={{

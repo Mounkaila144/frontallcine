@@ -10,7 +10,7 @@ import Image from "next/image";
 export default function HeaderPhone() {
 
     return (<HeaderDesing
-        logo={<img src="/images/hh.png" width={50} height={50}/>}
+        logo={<Image  src="/images/hh.png" width={50} height={50}/>}
         btnflexsm={
         <Button> bonjour</Button>
 

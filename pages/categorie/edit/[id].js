@@ -21,7 +21,7 @@ export default function EditCategorie() {
 
     const handleClose = () => {
         setOpen(false);
-        router.push("/articles/categorie")
+        router.push("/categorie/categorie")
     };
     if (router.isFallback) {
         return (

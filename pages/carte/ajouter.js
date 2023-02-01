@@ -1,14 +1,7 @@
-
-import url from "../../Components/global";
-import {useEffect, useRef, useState} from "react";
-import MyRequest from "../../Components/request";
-import {useRouter} from "next/router";
-import AjouterShapTable from "../../Components/shapshap/AjouterShapTable";
 import {Grid} from "@mui/material";
-import Button from "@mui/material/Button";
-import BeenhereIcon from "@mui/icons-material/Beenhere";
 import * as React from "react";
 import Typography from "@mui/material/Typography";
+import AjouterCarteTable from "../../Components/carte/AjouterCarteTable";
 
 export default function Ajouter() {
     return (
@@ -18,17 +11,11 @@ export default function Ajouter() {
                       justifyContent="center"
                       alignItems="center">
                     <Typography component="h3" sx={{fontSize: 53,fontFamily:"bold"}} variant="h5">
-                        Ajouter du credit
+                        Ajouter Des Cartes
                     </Typography>
                 </Grid>
-                <Grid item xs={4}>
-                <AjouterShapTable type={"orange"}/>
-                </Grid>
-                <Grid item xs={4}>
-                <AjouterShapTable type={"airtel"}/>
-                </Grid>
-                <Grid item xs={4}>
-                <AjouterShapTable type={"moov"}/>
+                <Grid item xs={12}>
+                    <AjouterCarteTable/>
                 </Grid>
             </Grid>
         </div>

@@ -18,55 +18,68 @@ const bull = (
     </Box>
 );
 
-export default function ItemCardBig({icon,text,color,jour,moi,annee}) {
-    const Cfa = (price) => {
-        return price.toLocaleString('fr-FR', {style: 'currency', currency: 'CFA'}).replace(',00', '');
-    }
+export default function ItemCardCarte({icon,text,temp,color,cent,deuxcent,cinqcent,mille}) {
     return (
         <Card sx={{ border:"solid 2px",borderColor:blue[600],maxHeight: 150,maxWidth:350,minHeight: 150,minWidth:350, boxShadow:3,backgroundColor:color,borderRadius:3 }} variant="outlined" elevation={3} square>
             <Grid container>
                 <Grid item xs={12}>
-                    <Typography color={"white"} variant='h6'  sx={{fontSize: 30,fontFamily:"bold"}} display='inline' >
                         <IconButton aria-label="home" >
                             {icon}
+                            <Typography color={"white"} variant='h6'  sx={{fontSize: 23,fontFamily:"bold"}} display='inline' >
+                            {text}<br/>
+                                <Typography color={"white"} variant='h6'  sx={{fontSize: 20,marginTop:-5}} display='inline' >
+                                    {temp}
+                                </Typography>
+                                </Typography>
+
                         </IconButton>
-                        {text}
-                    </Typography>
 
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={3}>
                     <Grid item xs={6}>
-                        <Typography color={"yellow"} component="h3" sx={{fontSize: 25,fontFamily:"bold"}} variant="h5">
-                            Jour
+                        <Typography color={"black"} component="h3" sx={{fontSize: 20,fontFamily:"bold"}} variant="h5">
+                            100CFA
                         </Typography>
                     </Grid>
                     <Grid item xs={6}>
-                        <Typography color={"yellow"} component="h3" sx={{fontSize: 18,fontFamily:"bold"}} variant="h5">
-                            {Cfa(parseInt(jour))}
-                        </Typography>
-                    </Grid>
-                </Grid>
-                <Grid item xs={4}>
-                    <Grid item xs={6}>
-                        <Typography color={red[900]} component="h3" sx={{fontSize: 25,fontFamily:"bold"}} variant="h5">
-                            Mensielle
-                        </Typography>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <Typography color={red[900]} component="h3" sx={{fontSize: 18,fontFamily:"bold"}} variant="h5">
-                            {Cfa(parseInt(moi))}
+                        <Typography color="white" component="h3" sx={{fontSize: 20,fontFamily:"bold"}} variant="h5">
+                            {cent}
                         </Typography>
                     </Grid>
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={3}>
                     <Grid item xs={6}>
-                        <Typography component="h3" sx={{fontSize: 25,fontFamily:"bold"}} variant="h5">
-                            Annuelle
+                        <Typography color={"black"} component="h3" sx={{fontSize: 20,fontFamily:"bold"}} variant="h5">
+                            200CFA
                         </Typography>
                     </Grid>
                     <Grid item xs={6}>
-                        <Typography component="h3" sx={{fontSize: 18,fontFamily:"bold"}} variant="h5">
-                            {Cfa(parseInt(annee))}
+                        <Typography color={"white"} component="h3" sx={{fontSize: 20,fontFamily:"bold"}} variant="h5">
+                            {deuxcent}
+                        </Typography>
+                    </Grid>
+                </Grid>
+                <Grid item xs={3}>
+                    <Grid item xs={6}>
+                        <Typography color={"black"} component="h3" sx={{fontSize: 20,fontFamily:"bold"}} variant="h5">
+                            500CFA
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Typography color={"white"} component="h3" sx={{fontSize: 20,fontFamily:"bold"}} variant="h5">
+                            {cinqcent}
+                        </Typography>
+                    </Grid>
+                </Grid>
+                <Grid item xs={3}>
+                    <Grid item xs={6}>
+                        <Typography color={"black"} component="h3" sx={{fontSize: 20,fontFamily:"bold"}} variant="h5">
+                            1000CFA
+                        </Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Typography color={"white"} component="h3" sx={{fontSize: 20,fontFamily:"bold"}} variant="h5">
+                            {mille}
                         </Typography>
                     </Grid>
                 </Grid>

@@ -28,7 +28,6 @@ import Button from "@mui/material/Button";
 import {Backdrop, Card, Chip, CircularProgress, Stack} from "@mui/material";
 import {blue, grey, red, yellow} from "@mui/material/colors";
 import Add from "../AddArticle";
-import ArticleDialog from "../ArticleDiable";
 import {useRouter} from "next/router";
 import url from "../global";
 import axios from "axios";
@@ -37,7 +36,10 @@ import Circular from "../Circular";
 import ErrorPage from "../ErrorPage";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import {UserContext} from "../../Context/GlobalContext";
-import EditArticle from "../EditArticle";
+import MyRequest from "../request";
+import EditArticle from "../articles/editArticle";
+import MyDialog from "../Dialog";
+
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -184,7 +186,7 @@ function EnhancedTableToolbar(props) {
     console.log(data)
     const removeSelect = async () => {
         setLoading(true)
-        const res = await axios.post(url + '/api/articles/delect', {"data":data})
+        await MyRequest('articles/delect', 'POST', {"data":data}, { 'Content-Type': 'application/json' })
             .then(function (response) {
                 if(response.status===200){
                     numSelected.length=0
@@ -367,9 +369,12 @@ export default function EnhancedTable({rows,id}) {
                     {user===2?
                     <EnhancedTableToolbar numSelected={selected}/>:null}
                     <TableContainer>
-                        {user===2?
-                        <ArticleDialog id={id}/>:null
-                        }
+                        <MyDialog
+                            text={"Ajouter"}
+                            description={"Ajouter un Nouveau Articles"}
+                            content={<Add id={id}/>}
+
+                        />
                         <Table
                             sx={{minWidth: 950}}
                             aria-labelledby="tableTitle"
@@ -421,7 +426,7 @@ export default function EnhancedTable({rows,id}) {
                                                 <TableCell
                                                     align="right"
                                                 >
-                                                    <img 
+                                                    <img
                                                         src={url + "/storage/article/" + row.image}
                                                         width={70} height={70}
                                                         alt={"image"}/>
@@ -436,6 +441,8 @@ export default function EnhancedTable({rows,id}) {
                                                 {user===2?
                                                     <TableCell>
                                                         <EditArticle id={row.id}/>
+
+
                                                     </TableCell> :null
                                                 }
 

@@ -7,7 +7,7 @@ import * as React from "react";
 import Slide from "@mui/material/Slide";
 import {useRouter} from "next/router";
 import Page from "../index";
-import ArticleDialog from "../../Components/ArticleDiable";
+import ArticleDialog from "../../Components/Dialog";
 import Edit from "../../Components/EditArticle";
 import {Backdrop, CircularProgress} from "@mui/material";
 import {useContext, useEffect, useRef, useState} from "react";

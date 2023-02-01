@@ -28,7 +28,7 @@ import Button from "@mui/material/Button";
 import {Backdrop, Card, Chip, CircularProgress, Stack} from "@mui/material";
 import {blue, grey, red, yellow} from "@mui/material/colors";
 import Add from "../AddArticle";
-import ArticleDialog from "../ArticleDiable";
+import ArticleDialog from "../Dialog";
 import {useRouter} from "next/router";
 import url from "../global";
 import axios from "axios";
@@ -205,7 +205,7 @@ function EnhancedTableToolbar(props) {
                         id="tableTitle"
                         component="div"
                     >
-                        Articles
+                        Ajouter de l'argent dans la caisse
                     </Typography>
                 )}
 

@@ -27,7 +27,7 @@ export function UploadImage({image}) {
                 onChange={onChange}
                 maxNumber={1}
                 dataURLKey="data_url"
-                acceptType={["jpg","png"]}
+                acceptType={["jpg","png","jpeg"]}
             >
                 {({
                       imageList,
@@ -57,7 +57,7 @@ export function UploadImage({image}) {
                         &nbsp;
                         {imageList.map((image, index) => (
                             <Box sx={{ margin:1,boxShadow:3}}>
-                                <img src={image.data_url} width={185} height={160} />
+                                <Image  src={image.data_url} width={185} height={160} />
                                 <div className="image-item__btn-wrapper">
                                     <Button startIcon={<EditIcon/>} sx={{height:25,width:100}} variant="contained" onClick={() => onImageUpdate(index)}>Modifier</Button>
                                 </div>

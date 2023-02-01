@@ -14,7 +14,7 @@ import Circular from "../Circular";
 import ErrorPage from "../ErrorPage";
 import {green, orange, red} from "@mui/material/colors";
 
-export default function FaireCarte({type}) {
+export default function FaireShapshap({type}) {
     const [prix, createPrix] = useState(null)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(false)

@@ -31,6 +31,7 @@ import ShapShapBtn from "../ShapShapBtn";
 import Image from "next/image";
 import Typography from "@mui/material/Typography";
 import MyRequest from "../request";
+import CarteBtn from "../carte/CarteBtn";
 
 const drawerWidth = 240;
 
@@ -173,6 +174,7 @@ export default function Sidbare({content}) {
                         <Divider sx={{backgroundColor:"white"}}/>
                         <CanalBtn text={"Canal +"} icon={<FormatListBulletedIcon/>}/>
                         <ShapShapBtn text={"ShapShap"} icon={<FormatListBulletedIcon/>}/>
+                        <CarteBtn text={"Carte"} icon={<FormatListBulletedIcon/>}/>
 
                         <ListItemButton sx={{
                                 color: "white",

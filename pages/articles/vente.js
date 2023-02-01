@@ -119,6 +119,7 @@ export default function Vente() {
                             createPrenom("")
                             emptyCart()
                             setSucess(true)
+                            router.push("/factures/factures")
 
                         }
                     }).finally(() => setIsLoaded(false)).catch( (e)=>alert(e) )
@@ -168,7 +169,7 @@ export default function Vente() {
                                                 key={articles.id}
                                                 sx={{'&:last-child td, &:last-child th': {border: 0}}}
                                             >
-                                                <TableCell> <img 
+                                                <TableCell> <Image 
                                                     src={url + "/storage/article/" + articles.image}
                                                     width={50} height={50} style={{borderRadius: 8}}
                                                     alt={"image"}/></TableCell>
@@ -248,7 +249,7 @@ export default function Vente() {
                                                     key={articles.id}
                                                     sx={{'&:last-child td, &:last-child th': {border: 0}}}
                                                 >
-                                                    <TableCell> <img 
+                                                    <TableCell> <Image 
                                                         src={url + "/storage/article/" + articles.image}
                                                         width={50} height={50} style={{borderRadius: 8}}
                                                         alt={"image"}/></TableCell>

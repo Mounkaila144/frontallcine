@@ -40,8 +40,8 @@ import RetirerDialog from "../RetirerDialog";
 import AjouterDialog from "../AjouterDialog";
 import MyDialog from "../Dialog";
 import MyRequest from "../request";
-import addShapshap from "./AddCarte";
-import AjouterUnShapshap from "./AddCarte";
+import addShapshap from "./AddShapshap";
+import AjouterUnShapshap from "./AddShapshap";
 import {UserContext} from "../../Context/GlobalContext";
 
 function descendingComparator(a, b, orderBy) {
@@ -232,7 +232,7 @@ function EnhancedTableToolbar(props,{type}) {
 EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
-export default function AjouterCarteTable({type}) {
+export default function AjouterShapTable({type}) {
     const refreshData=()=>{
         router.replace("shapshap/ajoute")
     }

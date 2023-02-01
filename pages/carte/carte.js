@@ -1,32 +1,10 @@
-
-import url from "../../Components/global";
-import {useEffect, useRef, useState} from "react";
-import MyRequest from "../../Components/request";
-import {useRouter} from "next/router";
-import AjouterShapTable from "../../Components/shapshap/AjouterShapTable";
-import {Alert, Grid} from "@mui/material";
-import Button from "@mui/material/Button";
-import BeenhereIcon from "@mui/icons-material/Beenhere";
+import {Grid} from "@mui/material";
 import * as React from "react";
 import Typography from "@mui/material/Typography";
-import FaireShapshapTable from "../../Components/shapshap/FaireShapshapTable";
+import AjouterCarteTable from "../../Components/carte/AjouterCarteTable";
 import FaireCarteTable from "../../Components/carte/FaireCarteTable";
 
-export default function Ajouter() {
-    const [data, setData] = useState(null);
-
-    useEffect(() => {
-        async function fetchData() {
-            await MyRequest('shapdashboard', 'GET', {}, {'Content-Type': 'application/json'})
-                .then(async (response) => {
-                    if (response.status === 200) {
-                        setData(response.data)
-                    }
-                })
-
-        }
-        fetchData()
-    }, []);
+export default function Carte() {
     return (
         <div style={{flexGrow: 1}}>
             <Grid container spacing={3}>
@@ -34,35 +12,11 @@ export default function Ajouter() {
                       justifyContent="center"
                       alignItems="center">
                     <Typography component="h3" sx={{fontSize: 53,fontFamily:"bold"}} variant="h5">
-                        Vente de Carte
+                        Vendre des Cartes
                     </Typography>
                 </Grid>
-                <Grid item xs={4}>
-                    {data?parseInt(data["orange"])<=10000?
-                        <Grid item xs={12} display="flex"
-                              justifyContent="center"
-                              alignItems="center">
-                            <Alert variant="filled" severity="error">Credit Canal inferieur a 100 000 CFA</Alert>
-                        </Grid>:null:null}
-                    <FaireCarteTable type={"orange"}/>
-                </Grid>
-                <Grid item xs={4}>
-                    {data?parseInt(data["airtel"])<=10000?
-                        <Grid item xs={12} display="flex"
-                              justifyContent="center"
-                              alignItems="center">
-                            <Alert variant="filled" severity="error">Credit Canal inferieur a 10 000 CFA</Alert>
-                        </Grid>:null:null}
-                    <FaireShapshapTable type={"airtel"}/>
-                </Grid>
-                <Grid item xs={4}>
-                    {data?parseInt(data["moov"])<=10000?
-                        <Grid item xs={12} display="flex"
-                              justifyContent="center"
-                              alignItems="center">
-                            <Alert variant="filled" severity="error">Credit Canal inferieur a 10 000 CFA</Alert>
-                        </Grid>:null:null}
-                    <FaireShapshapTable type={"moov"}/>
+                <Grid item xs={12}>
+                    <FaireCarteTable/>
                 </Grid>
             </Grid>
         </div>

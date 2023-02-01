@@ -28,7 +28,7 @@ import Button from "@mui/material/Button";
 import {Backdrop, Card, Chip, CircularProgress, Stack} from "@mui/material";
 import {blue, grey, red, yellow} from "@mui/material/colors";
 import Add from "../AddArticle";
-import ArticleDialog from "../ArticleDiable";
+import ArticleDialog from "../Dialog";
 import {useRouter} from "next/router";
 import url from "../global";
 import axios from "axios";
@@ -36,6 +36,7 @@ import {useState} from "react";
 import Circular from "../Circular";
 import ErrorPage from "../ErrorPage";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
+import MyRequest from "../request";
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -160,10 +161,9 @@ function EnhancedTableToolbar(props) {
     }
     const { numSelected } = props;
     var data=Object.values(numSelected);
-    console.log(data)
     const removeSelect = async () => {
         setLoading(true)
-        const res = await axios.post(url + '/api/factures/delect', {"data":data})
+        await MyRequest('factures/1', 'DELETE', {"data":data}, { 'Content-Type': 'application/json' })
             .then(function (response) {
                 if(response.status===200){
                     numSelected.length=0

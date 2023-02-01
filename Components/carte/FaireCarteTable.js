@@ -32,7 +32,7 @@ import ArticleDialog from "../ArticleDiable";
 import {useRouter} from "next/router";
 import url from "../global";
 import axios from "axios";
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import Circular from "../Circular";
 import ErrorPage from "../ErrorPage";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
@@ -42,6 +42,9 @@ import MyDialog from "../Dialog";
 import MyRequest from "../request";
 import addShapshap from "./AddCarte";
 import AjouterUnShapshap from "./AddCarte";
+import {UserContext} from "../../Context/GlobalContext";
+import AjouterUnCarte from "./AddCarte";
+import bg from "../login/loginComponent.module.css";
 import FaireCarte from "./FaireCarte";
 
 function descendingComparator(a, b, orderBy) {
@@ -75,6 +78,16 @@ function stableSort(array, comparator) {
 
 const headCells = [
     {
+        id: 'name',
+        numeric: true,
+        disablePadding: true,
+        label: 'type',
+    },{
+        id: 'name',
+        numeric: true,
+        disablePadding: true,
+        label: 'quantite',
+    },{
         id: 'name',
         numeric: true,
         disablePadding: true,
@@ -149,16 +162,18 @@ function EnhancedTableToolbar(props) {
     const router=useRouter();
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(false)
+    const {user,setUser}=useContext(UserContext)
+
 
     const refreshData=()=>{
-    router.push("/shapshap/dashboard")
+        router.push("/carte/dashboard")
     }
     const { numSelected } = props;
     var data=Object.values(numSelected);
     console.log(data)
     const removeSelect = async () => {
         setLoading(true)
-        await MyRequest('venteshapshaps/1',   'DELETE', {"data":data}, { 'Content-Type':'application/json' })
+        await MyRequest('ventecartes/1',   'DELETE', {"data":data}, { 'Content-Type':'application/json' })
             .then(async (response) => {
                 if (response.status === 200) {
                     numSelected.length=0
@@ -208,7 +223,7 @@ function EnhancedTableToolbar(props) {
                     </Typography>
                 )}
 
-                {numSelected.length > 0 ? (
+                {user===2?numSelected.length > 0 ? (
                     <Tooltip title="Suprimer">
                         <IconButton onClick={() => removeSelect()}>
                             <DeleteIcon/>
@@ -220,7 +235,8 @@ function EnhancedTableToolbar(props) {
                             <FilterListIcon/>
                         </IconButton>
                     </Tooltip>
-                )}
+                ):null
+                }
             </Toolbar>
         );
     }
@@ -229,9 +245,9 @@ function EnhancedTableToolbar(props) {
 EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
-export default function FaireCarteTable({type}) {
+export default function FaireCarteTable() {
     const refreshData=()=>{
-        router.replace(router.asPath)
+        router.replace("carte/carte")
     }
 
     const [order, setOrder] = React.useState('desc');
@@ -272,14 +288,14 @@ export default function FaireCarteTable({type}) {
     const router = useRouter();
     useEffect(() => {
         const fetchData = async () => {
-            await MyRequest('venteshapshaps?type='+type, 'GET', {}, { 'Content-Type': 'application/json' })
+            await MyRequest('ventecartes', 'GET', {}, { 'Content-Type': 'application/json' })
                 .then((response) => {
                     setData(response.data)
-                    router.replace(router.pathname, router.asPath, { shallow: true });
+
                 });
         };
         fetchData();
-    }, [router.pathname]);
+    }, []);
 
 
 
@@ -342,93 +358,92 @@ export default function FaireCarteTable({type}) {
         page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
     if (loading) {
         return (
-                <Circular/>
+            <Circular/>
         )
     } else {
         return (
-            <Box sx={{margin: 1, boxShadow: 2}}>
-                <Paper sx={{width: '100%', mb: 2,background:type==="orange"?orange[700]:type==="airtel"?red[700]:green[700]}}>
-                    <EnhancedTableToolbar numSelected={selected} type={type}/>
-                    <TableContainer>
-                        <MyDialog
-                            bacground={type==="orange"?orange[200]:type==="airtel"?red[200]:green[200]}
-                        text={"Shapshap"}
-                        description={"Shapshap "+type}
-                        content={<FaireCarte type={type}/>}
+            <Box className={bg.white} sx={{margin: 1, boxShadow: 2}}>
+                <EnhancedTableToolbar numSelected={selected}/>
+                <TableContainer>
+                    <MyDialog
+                        text={"Ventes"}
+                        description={"Vendres des Cartes"}
+                        content={<FaireCarte/>}
 
-                        />
-
-                        <Table
-                            sx={{minWidth: 200}}
-                            aria-labelledby="tableTitle"
-                            size={dense ? 'small' : 'medium'}
-                        >
-                            <EnhancedTableHead
-                                numSelected={selected.length}
-                                order={order}
-                                orderBy={orderBy}
-                                onSelectAllClick={handleSelectAllClick}
-                                onRequestSort={handleRequestSort}
-                                rowCount={rows.length}
-                            />
-                            <TableBody>
-                                {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-                 rows.sort(getComparator(order, orderBy)).slice() */}
-                                {stableSort(rows, getComparator(order, orderBy))
-                                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                    .map((row, index) => {
-                                        const isItemSelected = isSelected(row.id);
-                                        const labelId = `enhanced-table-checkbox-${index}`;
-                                        const fullDate = row.created_at;
-                                        const date = new Date(fullDate);
-                                        const shortDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()} ${date.getHours()}h:${date.getMinutes()}:${date.getSeconds()}`;
-
-                                        return (
-                                            <TableRow
-                                                hover
-                                                onClick={(event) => handleClick(event, row.id)}
-                                                role="checkbox"
-                                                aria-checked={isItemSelected}
-                                                tabIndex={-1}
-                                                key={row.id}
-                                                selected={isItemSelected}
-                                            >
-                                                <TableCell padding="checkbox">
-                                                    <Checkbox
-                                                        color="primary"
-                                                        checked={isItemSelected}
-                                                        inputProps={{
-                                                            'aria-labelledby': labelId,
-                                                        }}
-                                                    />
-                                                </TableCell>
-                                                <TableCell align="right">{row.prix} CFA</TableCell>
-                                                <TableCell align="right">{shortDate}</TableCell>
-                                            </TableRow>
-                                        );
-                                    })}
-                                {emptyRows > 0 && (
-                                    <TableRow
-                                        style={{
-                                            height: (dense ? 33 : 53) * emptyRows,
-                                        }}
-                                    >
-                                        <TableCell colSpan={6}/>
-                                    </TableRow>
-                                )}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
-                    <TablePagination
-                        rowsPerPageOptions={[5, 10, 25]}
-                        component="div"
-                        count={rows.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        onPageChange={handleChangePage}
-                        onRowsPerPageChange={handleChangeRowsPerPage}
                     />
-                </Paper>
+
+                    <Table
+                        sx={{minWidth: 200}}
+                        aria-labelledby="tableTitle"
+                        size={dense ? 'small' : 'medium'}
+                    >
+                        <EnhancedTableHead
+                            numSelected={selected.length}
+                            order={order}
+                            orderBy={orderBy}
+                            onSelectAllClick={handleSelectAllClick}
+                            onRequestSort={handleRequestSort}
+                            rowCount={rows.length}
+                        />
+                        <TableBody>
+                            {/* if you don't need to support IE11, you can replace the `stableSort` call with:
+                 rows.sort(getComparator(order, orderBy)).slice() */}
+                            {stableSort(rows, getComparator(order, orderBy))
+                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                                .map((row, index) => {
+                                    const isItemSelected = isSelected(row.id);
+                                    const labelId = `enhanced-table-checkbox-${index}`;
+                                    const fullDate = row.created_at;
+                                    const date = new Date(fullDate);
+                                    const shortDate = `${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()} ${date.getHours()}h:${date.getMinutes()}:${date.getSeconds()}`;
+
+                                    return (
+                                        <TableRow
+                                            hover
+                                            onClick={(event) => handleClick(event, row.id)}
+                                            role="checkbox"
+                                            aria-checked={isItemSelected}
+                                            tabIndex={-1}
+                                            key={row.id}
+                                            selected={isItemSelected}
+                                        >
+                                            <TableCell padding="checkbox">
+                                                <Checkbox
+                                                    color="primary"
+                                                    checked={isItemSelected}
+                                                    inputProps={{
+                                                        'aria-labelledby': labelId,
+                                                    }}
+                                                />
+                                            </TableCell>
+                                            <TableCell align="right">{row.type}</TableCell>
+                                            <TableCell align="right">{row.quantite}</TableCell>
+                                            <TableCell align="right">{row.prix} CFA</TableCell>
+                                            <TableCell align="right">{shortDate}</TableCell>
+                                        </TableRow>
+                                    );
+                                })}
+                            {emptyRows > 0 && (
+                                <TableRow
+                                    style={{
+                                        height: (dense ? 33 : 53) * emptyRows,
+                                    }}
+                                >
+                                    <TableCell colSpan={6}/>
+                                </TableRow>
+                            )}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                <TablePagination
+                    rowsPerPageOptions={[5, 10, 25]}
+                    component="div"
+                    count={rows.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                />
                 <FormControlLabel
                     control={<Switch checked={dense} onChange={handleChangeDense}/>}
                     label="Dense padding"

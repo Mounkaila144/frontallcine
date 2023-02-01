@@ -7,49 +7,33 @@ import Typography from "@mui/material/Typography";
 import {useContext, useState} from "react";
 import Button from "@mui/material/Button";
 import {useRouter} from "next/router";
-import {Grid, Select} from "@mui/material";
+import {Grid} from "@mui/material";
 import BeenhereIcon from "@mui/icons-material/Beenhere";
 import MyRequest from "../request";
 import Circular from "../Circular";
 import ErrorPage from "../ErrorPage";
 import {green, orange, red} from "@mui/material/colors";
-import MenuItem from "@mui/material/MenuItem";
 
-export default function AjouterUnCarte({type}) {
+export default function AjouterUnShapshap({type}) {
     const [prix, createPrix] = useState(null)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(false)
 
     const router = useRouter();
     const refreshData = () => {
-        router.push("/carte/dashboard")
+        type==="canal"?router.push("/canal/dashboard"):router.push("/shapshap/dashboard")
     }
-    const options2 = [
-        { value: '100', label: '100 CFA'},
-        { value: '200', label: '200 CFA'},
-        { value: '500', label: '500 CFA'},
-        { value: '1000', label: '1000 CFA'}
 
-    ];
-    const options = [
-        { value: 'orange', label: 'Orange '},
-        { value: 'airtel', label: 'Airtel '},
-        { value: 'moov', label: 'Moov '},
-
-    ];
-
-    const [selectedOption, setSelectedOption] = useState(options[0].value);
-    const [selectedOption2, setSelectedOption2] = useState(options2[0].value);
 
     const onSubmit = async (e) => {
         e.preventDefault()
         const formData = {
-            "prix": selectedOption,
-            "type": selectedOption2,
+            "prix": prix,
+            "type": type,
         }
         try {
             setLoading(true)
-            MyRequest('carte', 'POST', formData, { 'Content-Type': 'application/json' })
+            MyRequest('shapcanals', 'POST', formData, { 'Content-Type': 'application/json' })
                 .then(async (response) => {
                     if (response.status === 200) {
                         await refreshData()
@@ -73,41 +57,26 @@ export default function AjouterUnCarte({type}) {
                     <FormControl sx={{m: 1, width: '25ch'}} variant="outlined">
                         <FormHelperText id="achat">
                             <Typography component="h3" sx={{fontSize: 23}} variant="h5">
-                                Type de carte
+                                Credit à ajouter
                             </Typography>
                         </FormHelperText>
-                        <Select
-                            value={selectedOption}
-                            onChange={(event) => setSelectedOption(event.target.value)}
-                        >
-                            {options.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
-                                    {option.label}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </Grid>
-                 <Grid item xs={6}>
-                    <FormControl sx={{m: 1, width: '25ch'}} variant="outlined">
-                        <FormHelperText id="achat">
-                            <Typography component="h3" sx={{fontSize: 23}} variant="h5">
-                                Prix
-                            </Typography>
-                        </FormHelperText>
-                        <Select
-                            value={selectedOption2}
-                            onChange={(event) => setSelectedOption2(event.target.value)}
-                        >
-                            {options2.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
-                                    {option.label}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-                </Grid>
 
+                        <OutlinedInput
+                            sx={{height: '5ch', boxShadow: 3, borderRadius: 2}}
+                            id="achat"
+                            onChange={(event) => {
+                                createPrix(parseInt(event.target.value))
+                            }}
+                            endAdornment={<InputAdornment position="end">CFA</InputAdornment>}
+                            aria-describedby="prix"
+                            inputProps={{
+                                'type': "number",
+                                'aria-label': 'weight',
+                                'min':0
+                            }}
+                        />
+                    </FormControl>
+                </Grid>
                 <Grid item xs={12} display="flex"
                       justifyContent="center"
                       alignItems="center">

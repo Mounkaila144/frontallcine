@@ -40,9 +40,9 @@ import RetirerDialog from "../RetirerDialog";
 import AjouterDialog from "../AjouterDialog";
 import MyDialog from "../Dialog";
 import MyRequest from "../request";
-import addShapshap from "./AddCarte";
-import AjouterUnShapshap from "./AddCarte";
-import FaireCarte from "./FaireCarte";
+import addShapshap from "./AddShapshap";
+import AjouterUnShapshap from "./AddShapshap";
+import FaireShapshap from "./FaireShapshap";
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -229,7 +229,7 @@ function EnhancedTableToolbar(props) {
 EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
-export default function FaireCarteTable({type}) {
+export default function FaireShapshapTable({type}) {
     const refreshData=()=>{
         router.replace(router.asPath)
     }
@@ -354,7 +354,7 @@ export default function FaireCarteTable({type}) {
                             bacground={type==="orange"?orange[200]:type==="airtel"?red[200]:green[200]}
                         text={"Shapshap"}
                         description={"Shapshap "+type}
-                        content={<FaireCarte type={type}/>}
+                        content={<FaireShapshap type={type}/>}
 
                         />
 

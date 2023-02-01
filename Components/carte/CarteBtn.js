@@ -8,9 +8,9 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import {useRouter} from "next/router";
 import {useContext} from "react";
-import {UserContext} from "../Context/GlobalContext";
+import {UserContext} from "../../Context/GlobalContext";
 
-export default function ShapShapBtn({text,icon}) {
+export default function CarteBtn({text,icon}) {
     const [anchorEl, setAnchorEl] = React.useState(null);
     const open = Boolean(anchorEl);
     const router = useRouter();
@@ -61,18 +61,18 @@ export default function ShapShapBtn({text,icon}) {
                     'aria-labelledby': 'basic-button',
                 }}
             >
-                <MenuItem sx={{color: "white", maxHeight: 100, borderRadius: 5, background: router.pathname==="/shapshap/dashboard"?blue[800]: blueGrey[700], justifyContent: 'initial', px: 2.5, '&:hover': {background: blue[800], borderRadius: 5,}, margin:1,boxShadow:3}}
+                <MenuItem sx={{color: "white", maxHeight: 100, borderRadius: 5, background: router.pathname==="/carte/dashboard"?blue[800]: blueGrey[700], justifyContent: 'initial', px: 2.5, '&:hover': {background: blue[800], borderRadius: 5,}, margin:1,boxShadow:3}}
                           onClick={()=> {
-                              router.pathname==="/shapshap/dashboard"?null:router.push("/shapshap/dashboard")
+                              router.pathname==="/carte/dashboard"?null:router.push("/carte/dashboard")
                           }}>Dashboard</MenuItem>
-                {user===2?<MenuItem sx={{color: "white", maxHeight: 100, borderRadius: 5, background: router.pathname==="/shapshap/ajouter"?blue[800]: blueGrey[700], justifyContent: 'initial', px: 2.5, '&:hover': {background: blue[800], borderRadius: 5,}, margin:1,boxShadow:3}}
+                {user===2?<MenuItem sx={{color: "white", maxHeight: 100, borderRadius: 5, background: router.pathname==="/carte/ajouter"?blue[800]: blueGrey[700], justifyContent: 'initial', px: 2.5, '&:hover': {background: blue[800], borderRadius: 5,}, margin:1,boxShadow:3}}
                           onClick={()=> {
-                              router.pathname==="/shapshap/ajouter"?null:router.push("/shapshap/ajouter")
-                          }}>Ajouter de l'argent</MenuItem>:null}
-                <MenuItem sx={{color: "white", maxHeight: 100, borderRadius: 5, background: router.pathname==="/shapshap/shapshap"?blue[800]: blueGrey[700], justifyContent: 'initial', px: 2.5, '&:hover': {background: blue[800], borderRadius: 5,}, margin:1,boxShadow:3}}
+                              router.pathname==="/carte/ajouter"?null:router.push("/carte/ajouter")
+                          }}>Ajouter des Cartes</MenuItem>:null}
+                <MenuItem sx={{color: "white", maxHeight: 100, borderRadius: 5, background: router.pathname==="/carte/carte"?blue[800]: blueGrey[700], justifyContent: 'initial', px: 2.5, '&:hover': {background: blue[800], borderRadius: 5,}, margin:1,boxShadow:3}}
                           onClick={()=> {
-                              router.pathname==="/shapshap/shapshap"?null:router.push("/shapshap/shapshap")
-                          }}>Faire un shapshap</MenuItem>
+                              router.pathname==="/carte/carte"?null:router.push("/carte/carte")
+                          }}>Vendre une carte</MenuItem>
             </Menu>
         </div>
     );

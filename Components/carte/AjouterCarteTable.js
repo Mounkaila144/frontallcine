@@ -43,6 +43,8 @@ import MyRequest from "../request";
 import addShapshap from "./AddCarte";
 import AjouterUnShapshap from "./AddCarte";
 import {UserContext} from "../../Context/GlobalContext";
+import AjouterUnCarte from "./AddCarte";
+import bg from "../login/loginComponent.module.css";
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -75,6 +77,16 @@ function stableSort(array, comparator) {
 
 const headCells = [
     {
+        id: 'name',
+        numeric: true,
+        disablePadding: true,
+        label: 'type',
+    },{
+        id: 'name',
+        numeric: true,
+        disablePadding: true,
+        label: 'quantite',
+    },{
         id: 'name',
         numeric: true,
         disablePadding: true,
@@ -145,7 +157,7 @@ EnhancedTableHead.propTypes = {
     rowCount: PropTypes.number.isRequired,
 };
 
-function EnhancedTableToolbar(props,{type}) {
+function EnhancedTableToolbar(props) {
     const router=useRouter();
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(false)
@@ -153,14 +165,14 @@ function EnhancedTableToolbar(props,{type}) {
 
 
     const refreshData=()=>{
-        type==="canal"?router.push("/canal/dashboard"):router.push("/shapshap/dashboard")
+        router.push("/carte/dashboard")
     }
     const { numSelected } = props;
     var data=Object.values(numSelected);
     console.log(data)
     const removeSelect = async () => {
         setLoading(true)
-        await MyRequest('shapcanals/1',   'DELETE', {"data":data}, { 'Content-Type':'application/json' })
+        await MyRequest('cartes/1',   'DELETE', {"data":data}, { 'Content-Type':'application/json' })
             .then(async (response) => {
                 if (response.status === 200) {
                     numSelected.length=0
@@ -232,9 +244,9 @@ function EnhancedTableToolbar(props,{type}) {
 EnhancedTableToolbar.propTypes = {
     numSelected: PropTypes.number.isRequired,
 };
-export default function AjouterCarteTable({type}) {
+export default function AjouterCarteTable() {
     const refreshData=()=>{
-        router.replace("shapshap/ajoute")
+        router.replace("carte/ajoute")
     }
 
     const [order, setOrder] = React.useState('desc');
@@ -275,7 +287,7 @@ export default function AjouterCarteTable({type}) {
     const router = useRouter();
     useEffect(() => {
         const fetchData = async () => {
-            await MyRequest('shapcanals?type='+type, 'GET', {}, { 'Content-Type': 'application/json' })
+            await MyRequest('cartes', 'GET', {}, { 'Content-Type': 'application/json' })
                 .then((response) => {
                     setData(response.data)
 
@@ -349,15 +361,13 @@ export default function AjouterCarteTable({type}) {
         )
     } else {
         return (
-            <Box sx={{margin: 1, boxShadow: 2}}>
-                <Paper sx={{width: '100%', mb: 2,background:type==="orange"?orange[700]:type==="airtel"?red[700]:green[700]}}>
-                    <EnhancedTableToolbar numSelected={selected} type={type}/>
+            <Box className={bg.white} sx={{margin: 1, boxShadow: 2}}>
+                    <EnhancedTableToolbar numSelected={selected}/>
                     <TableContainer>
                         <MyDialog
-                            bacground={type==="orange"?orange[200]:type==="airtel"?red[200]:green[200]}
                         text={"Ajouter"}
-                        description={"Ajouter  credit "+type}
-                        content={<AjouterUnShapshap type={type}/>}
+                        description={"Ajouter des Cartes"}
+                        content={<AjouterUnCarte/>}
 
                         />
 
@@ -405,6 +415,8 @@ export default function AjouterCarteTable({type}) {
                                                         }}
                                                     />
                                                 </TableCell>
+                                                <TableCell align="right">{row.type}</TableCell>
+                                                <TableCell align="right">{row.quantite}</TableCell>
                                                 <TableCell align="right">{row.prix} CFA</TableCell>
                                                 <TableCell align="right">{shortDate}</TableCell>
                                             </TableRow>
@@ -431,7 +443,6 @@ export default function AjouterCarteTable({type}) {
                         onPageChange={handleChangePage}
                         onRowsPerPageChange={handleChangeRowsPerPage}
                     />
-                </Paper>
                 <FormControlLabel
                     control={<Switch checked={dense} onChange={handleChangeDense}/>}
                     label="Dense padding"

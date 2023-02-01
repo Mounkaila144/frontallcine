@@ -17,6 +17,7 @@ import MenuItem from "@mui/material/MenuItem";
 
 export default function AjouterUnCarte({type}) {
     const [prix, createPrix] = useState(null)
+    const [quantite, createQuantite] = useState(null)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(false)
 
@@ -44,12 +45,13 @@ export default function AjouterUnCarte({type}) {
     const onSubmit = async (e) => {
         e.preventDefault()
         const formData = {
-            "prix": selectedOption,
-            "type": selectedOption2,
+            "prix": selectedOption2,
+            "type": selectedOption,
+            "quantite": quantite,
         }
         try {
             setLoading(true)
-            MyRequest('carte', 'POST', formData, { 'Content-Type': 'application/json' })
+            MyRequest('cartes', 'POST', formData, { 'Content-Type': 'application/json' })
                 .then(async (response) => {
                     if (response.status === 200) {
                         await refreshData()
@@ -69,8 +71,8 @@ export default function AjouterUnCarte({type}) {
     } else {
         return (
             <Grid container rowSpacing={1} sx={{margin: 1, boxShadow: 3, borderRadius: 3}} columnSpacing={{xs: 1, sm: 2, md: 3}}>
-                <Grid item xs={6}>
-                    <FormControl sx={{m: 1, width: '25ch'}} variant="outlined">
+                <Grid item xs={4}>
+                    <FormControl sx={{m: 1, width: '20ch'}} variant="outlined">
                         <FormHelperText id="achat">
                             <Typography component="h3" sx={{fontSize: 23}} variant="h5">
                                 Type de carte
@@ -88,8 +90,8 @@ export default function AjouterUnCarte({type}) {
                         </Select>
                     </FormControl>
                 </Grid>
-                 <Grid item xs={6}>
-                    <FormControl sx={{m: 1, width: '25ch'}} variant="outlined">
+                 <Grid item xs={4}>
+                    <FormControl sx={{m: 1, width: '20ch'}} variant="outlined">
                         <FormHelperText id="achat">
                             <Typography component="h3" sx={{fontSize: 23}} variant="h5">
                                 Prix
@@ -106,6 +108,28 @@ export default function AjouterUnCarte({type}) {
                             ))}
                         </Select>
                     </FormControl>
+                </Grid>
+                 <Grid item xs={4}>
+                     <FormControl sx={{m: 1, width: '15ch'}} variant="outlined">
+                         <FormHelperText id="achat">
+                             <Typography component="h3" sx={{fontSize: 23}} variant="h5">
+                                 Quantité
+                             </Typography>
+                         </FormHelperText>
+
+                         <OutlinedInput
+                             sx={{height: '5ch', boxShadow: 3, borderRadius: 2}}
+                             id="achat"
+                             onChange={(event) => {
+                                 createQuantite(parseInt(event.target.value))
+                             }}
+                             aria-describedby="nom"
+                             inputProps={{
+                                 'type': "number",
+                                 'aria-label': 'weight',
+                             }}
+                         />
+                     </FormControl>
                 </Grid>
 
                 <Grid item xs={12} display="flex"

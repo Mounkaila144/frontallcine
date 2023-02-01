@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {Grid} from "@mui/material";
 import Paper from "@mui/material/Paper";
 import PointOfSaleIcon from '@mui/icons-material/PointOfSale';
-import {blueGrey, green, orange, red, yellow} from "@mui/material/colors";
+import {blue, blueGrey, green, orange, red, yellow} from "@mui/material/colors";
 import PaidIcon from '@mui/icons-material/Paid';
 import CategoryIcon from '@mui/icons-material/Category';
 import {useRouter} from "next/router";
@@ -10,6 +10,8 @@ import {UserContext} from "../../Context/GlobalContext";
 import MyRequest from "../../Components/request";
 import Circular from "../../Components/Circular";
 import ItemCardColor from "../../Components/itemCardColor";
+import ItemCardBig from "../../Components/itemCardBig";
+import ItemCardCarte from "../../Components/itemCardCarte";
 
 
 function Dashboard() {
@@ -18,13 +20,9 @@ function Dashboard() {
     const {user, setUser} = useContext(UserContext)
 
 
-    const Cfa = (price) => {
-        return price.toLocaleString('fr-FR', {style: 'currency', currency: 'CFA'}).replace(',00', '');
-    }
-
     useEffect(() => {
         async function fetchData() {
-            await MyRequest('shapdashboard', 'GET', {}, {'Content-Type': 'application/json'})
+            await MyRequest('cartedashboard', 'GET', {}, {'Content-Type': 'application/json'})
                 .then(async (response) => {
                     if (response.status === 200) {
                         setData(response.data)
@@ -45,138 +43,272 @@ function Dashboard() {
     if (data) {
         return (
             <div style={{flexGrow: 1}}>
-            <Grid container spacing={3}>
-                <Grid item xs={12}>
-                    <Paper style={{padding: '16px', textAlign: 'center', color: '#757575', boxShadow: 3}}>
-                        <Grid container spacing={3} justify="center">
+                <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                            <Grid container spacing={3} justify="center">
+                                <Grid item xs={4}>
+                                    <ItemCardCarte color={orange[800]}
+                                                 icon={<PointOfSaleIcon
+                                                     sx={{
+                                                         fontSize: 60,
+                                                         color: "white",
+                                                         backgroundColor: "black",
+                                                         borderRadius: 2,
+                                                         boxShadow: 3,
 
-                            <Grid item xs={4}>
-                                <ItemCardColor color={orange[700]} icon={<PointOfSaleIcon sx={{
-                                    fontSize: 60,
-                                    color: "white",
-                                    backgroundColor: blueGrey[900],
-                                    borderRadius: 2,
-                                    boxShadow: 3,
-                                    marginTop: -5
-                                }}/>} text={"Credit Orange"} number={Cfa(data.orange)}/>
+                                                     }}/>}
+                                                 text={"Stock Carte Orange"}
+                                                 cent={data.orange100}
+                                                 deuxcent={data.orange200}
+                                                 cinqcent={data.orange500}
+                                                 mille={data.orange1000}
+                                    />
+
+
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <ItemCardCarte color={red[700]}
+                                                 icon={<PointOfSaleIcon
+                                                     sx={{
+                                                         fontSize: 60,
+                                                         color: "white",
+                                                         backgroundColor: "black",
+                                                         borderRadius: 2,
+                                                         boxShadow: 3,
+
+                                                     }}/>}
+                                                 text={"Stock Carte Airtel"}
+                                                 cent={data.airtel100}
+                                                 deuxcent={data.airtel200}
+                                                 cinqcent={data.airtel500}
+                                                 mille={data.airtel1000}
+                                    />
+
+
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <ItemCardCarte color={green[700]}
+                                                 icon={<PointOfSaleIcon
+                                                     sx={{
+                                                         fontSize: 60,
+                                                         color: "white",
+                                                         backgroundColor: "black",
+                                                         borderRadius: 2,
+                                                         boxShadow: 3,
+
+                                                     }}/>}
+                                                 text={"Stock Carte Moov"}
+                                                 cent={data.moov100}
+                                                 deuxcent={data.moov200}
+                                                 cinqcent={data.moov500}
+                                                 mille={data.moov1000}
+                                    />
+
+
+                                </Grid>
+                                {/*Vente journaliere*/}
+                                <Grid item xs={4}>
+                                    <ItemCardCarte color={orange[800]}
+                                                 icon={<PointOfSaleIcon
+                                                     sx={{
+                                                         fontSize: 60,
+                                                         color: "white",
+                                                         backgroundColor: "black",
+                                                         borderRadius: 2,
+                                                         boxShadow: 3,
+
+                                                     }}/>}
+                                                 text={"Carte Orange Vendue"}
+                                                   temp={"Aujourd'hui"}
+                                                 cent={data.venteorangeJour100}
+                                                 deuxcent={data.venteorangeJour200}
+                                                 cinqcent={data.venteorangeJour500}
+                                                 mille={data.venteorangeJour1000}
+                                    />
+
+
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <ItemCardCarte color={red[700]}
+                                                 icon={<PointOfSaleIcon
+                                                     sx={{
+                                                         fontSize: 60,
+                                                         color: "white",
+                                                         backgroundColor: "black",
+                                                         borderRadius: 2,
+                                                         boxShadow: 3,
+
+                                                     }}/>}
+                                                 text={"Carte Airtel Vendue"}
+                                                   temp={"Aujourd'hui"}
+                                                 cent={data.venteairtelJour100}
+                                                 deuxcent={data.venteairtelJour200}
+                                                 cinqcent={data.venteairtelJour500}
+                                                 mille={data.venteairtelJour1000}
+                                    />
+
+
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <ItemCardCarte color={green[700]}
+                                                 icon={<PointOfSaleIcon
+                                                     sx={{
+                                                         fontSize: 60,
+                                                         color: "white",
+                                                         backgroundColor: "black",
+                                                         borderRadius: 2,
+                                                         boxShadow: 3,
+
+                                                     }}/>}
+                                                 text={"Carte Moov Vendue"}
+                                                   temp={"Aujourd'hui"}
+                                                 cent={data.ventemoovJour100}
+                                                 deuxcent={data.ventemoovJour200}
+                                                 cinqcent={data.ventemoovJour500}
+                                                 mille={data.ventemoovJour1000}
+                                    />
+
+
+                                </Grid>
+                                {/*Vente Mensielle*/}
+                                <Grid item xs={4}>
+                                    <ItemCardCarte color={orange[800]}
+                                                   icon={<PointOfSaleIcon
+                                                       sx={{
+                                                           fontSize: 60,
+                                                           color: "white",
+                                                           backgroundColor: "black",
+                                                           borderRadius: 2,
+                                                           boxShadow: 3,
+
+                                                       }}/>}
+                                                   text={"Carte Orange Vendue"}
+                                                   temp={"Ce Moi"}
+                                                   cent={data.venteorangeMoi100}
+                                                   deuxcent={data.venteorangeMoi200}
+                                                   cinqcent={data.venteorangeMoi500}
+                                                   mille={data.venteorangeMoi1000}
+                                    />
+
+
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <ItemCardCarte color={red[700]}
+                                                   icon={<PointOfSaleIcon
+                                                       sx={{
+                                                           fontSize: 60,
+                                                           color: "white",
+                                                           backgroundColor: "black",
+                                                           borderRadius: 2,
+                                                           boxShadow: 3,
+
+                                                       }}/>}
+                                                   text={"Carte Airtel Vendue"}
+                                                   temp={"Ce Moi"}
+                                                   cent={data.venteairtelMoi100}
+                                                   deuxcent={data.venteairtelMoi200}
+                                                   cinqcent={data.venteairtelMoi500}
+                                                   mille={data.venteairtelMoi1000}
+                                    />
+
+
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <ItemCardCarte color={green[700]}
+                                                   icon={<PointOfSaleIcon
+                                                       sx={{
+                                                           fontSize: 60,
+                                                           color: "white",
+                                                           backgroundColor: "black",
+                                                           borderRadius: 2,
+                                                           boxShadow: 3,
+
+                                                       }}/>}
+                                                   text={"Carte Moov Vendue"}
+                                                   temp={"Ce Moi"}
+                                                   cent={data.ventemoovMoi100}
+                                                   deuxcent={data.ventemoovMoi200}
+                                                   cinqcent={data.ventemoovMoi500}
+                                                   mille={data.ventemoovMoi1000}
+                                    />
+
+
+                                </Grid>
+                                {/*Vente Mensielle*/}
+                                <Grid item xs={4}>
+                                    <ItemCardCarte color={orange[800]}
+                                                   icon={<PointOfSaleIcon
+                                                       sx={{
+                                                           fontSize: 60,
+                                                           color: "white",
+                                                           backgroundColor: "black",
+                                                           borderRadius: 2,
+                                                           boxShadow: 3,
+
+                                                       }}/>}
+                                                   text={"Carte Orange Vendue"}
+                                                   temp={"Cette Année"}
+                                                   cent={data.venteorangeAnnee100}
+                                                   deuxcent={data.venteorangeAnnee200}
+                                                   cinqcent={data.venteorangeAnnee500}
+                                                   mille={data.venteorangeAnnee1000}
+                                    />
+
+
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <ItemCardCarte color={red[700]}
+                                                   icon={<PointOfSaleIcon
+                                                       sx={{
+                                                           fontSize: 60,
+                                                           color: "white",
+                                                           backgroundColor: "black",
+                                                           borderRadius: 2,
+                                                           boxShadow: 3,
+
+                                                       }}/>}
+                                                   text={"Carte Airtel Vendue"}
+                                                   temp={"Cette Année"}
+                                                   cent={data.venteairtelAnnee100}
+                                                   deuxcent={data.venteairtelAnnee200}
+                                                   cinqcent={data.venteairtelAnnee500}
+                                                   mille={data.venteairtelAnnee1000}
+                                    />
+
+
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <ItemCardCarte color={green[700]}
+                                                   icon={<PointOfSaleIcon
+                                                       sx={{
+                                                           fontSize: 60,
+                                                           color: "white",
+                                                           backgroundColor: "black",
+                                                           borderRadius: 2,
+                                                           boxShadow: 3,
+
+                                                       }}/>}
+                                                   text={"Carte Moov Vendue"}
+                                                   temp={"Cette Année"}
+                                                   cent={data.ventemoovAnnee100}
+                                                   deuxcent={data.ventemoovAnnee200}
+                                                   cinqcent={data.ventemoovAnnee500}
+                                                   mille={data.ventemoovAnnee1000}
+                                    />
+
+
+                                </Grid>
+
                             </Grid>
-
-                            <Grid item xs={4}>
-                                <ItemCardColor color={red[700]} icon={<PointOfSaleIcon sx={{
-                                    fontSize: 60,
-                                    color: "white",
-                                    backgroundColor: blueGrey[900],
-                                    borderRadius: 2,
-                                    boxShadow: 3,
-                                    marginTop: -5
-                                }}/>} text={"Credit Airtel"} number={Cfa(data.airtel)}/>
-                            </Grid>
-
-                            <Grid item xs={4}>
-                                <ItemCardColor color={green[700]} icon={<PointOfSaleIcon sx={{
-                                    fontSize: 60,
-                                    color: "white",
-                                    backgroundColor: blueGrey[900],
-                                    borderRadius: 2,
-                                    boxShadow: 3,
-                                    marginTop: -5
-                                }}/>} text={"Credit Moov"} number={Cfa(data.moov)}/>
-                            </Grid>
-
-
-                            <Grid item xs={4}><ItemCardColor color={orange[700]} icon={<PaidIcon sx={{
-                                fontSize: 60,
-                                color: "white",
-                                backgroundColor: blueGrey[900],
-                                borderRadius: 2,
-                                boxShadow: 3,
-                                marginTop: -5
-                            }}/>} text={"Vente Journalière"} number={Cfa(parseInt(data.venteorangeJour))}/></Grid>
-
-                            <Grid item xs={4}><ItemCardColor color={red[700]} icon={<PaidIcon sx={{
-                                fontSize: 60,
-                                color: "white",
-                                backgroundColor: blueGrey[900],
-                                borderRadius: 2,
-                                boxShadow: 3,
-                                marginTop: -5
-                            }}/>} text={"Vente Journalière"} number={Cfa(parseInt(data.venteairtelJour))}/></Grid>
-
-                            <Grid item xs={4}><ItemCardColor color={green[700]} icon={<PaidIcon sx={{
-                                fontSize: 60,
-                                color: "white",
-                                backgroundColor: blueGrey[900],
-                                borderRadius: 2,
-                                boxShadow: 3,
-                                marginTop: -5
-                            }}/>} text={"Vente Journalière"} number={Cfa(parseInt(data.ventemoovJour))}/></Grid>
-
-                            <Grid item xs={4}><ItemCardColor color={orange[700]} icon={<PaidIcon sx={{
-                                fontSize: 60,
-                                color: "white",
-                                backgroundColor: blueGrey[900],
-                                borderRadius: 2,
-                                boxShadow: 3,
-                                marginTop: -5
-                            }}/>} text={"Vente Mensuelle"}
-                                                        number={Cfa(parseInt(data.venteorangeMoi))}/></Grid>
-                            <Grid item xs={4}><ItemCardColor color={red[700]} icon={<PaidIcon sx={{
-                                fontSize: 60,
-                                color: "white",
-                                backgroundColor: blueGrey[900],
-                                borderRadius: 2,
-                                boxShadow: 3,
-                                marginTop: -5
-                            }}/>} text={"Vente Mensuelle"}
-                                                        number={Cfa(parseInt(data.venteairtelMoi))}/></Grid>
-                            <Grid item xs={4}><ItemCardColor color={green[700]} icon={<PaidIcon sx={{
-                                fontSize: 60,
-                                color: "white",
-                                backgroundColor: blueGrey[900],
-                                borderRadius: 2,
-                                boxShadow: 3,
-                                marginTop: -5
-                            }}/>} text={"Vente Mensuelle"}
-                                                        number={Cfa(parseInt(data.ventemoovMoi))}/></Grid>
-                            <Grid item xs={4}><ItemCardColor color={orange[700]} icon={<PaidIcon sx={{
-                                fontSize: 60,
-                                color: "white",
-                                backgroundColor: blueGrey[900],
-                                borderRadius: 2,
-                                boxShadow: 3,
-                                marginTop: -5
-                            }}/>} text={"Vente Annuelle"}
-                                                        number={Cfa(parseInt(data.venteorangeAnnee))}/></Grid>
-                            <Grid item xs={4}><ItemCardColor color={red[700]} icon={<PaidIcon sx={{
-                                fontSize: 60,
-                                color: "white",
-                                backgroundColor: blueGrey[900],
-                                borderRadius: 2,
-                                boxShadow: 3,
-                                marginTop: -5
-                            }}/>} text={"Vente Annuelle"}
-                                                        number={Cfa(parseInt(data.venteairtelAnnee))}/></Grid>
-                            <Grid item xs={4}><ItemCardColor color={green[700]} icon={<PaidIcon sx={{
-                                fontSize: 60,
-                                color: "white",
-                                backgroundColor: blueGrey[900],
-                                borderRadius: 2,
-                                boxShadow: 3,
-                                marginTop: -5
-                            }}/>} text={"Vente Annuelle"}
-                                                        number={Cfa(parseInt(data.ventemoovAnnee))}/></Grid>
-
-                        </Grid>
-                    </Paper>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Paper style={{padding: '16px', textAlign: 'center', color: '#757575', boxShadow: 3}}></Paper>
+                    </Grid>
+                    <Grid item xs={6}>
+                        <Paper style={{padding: '16px', textAlign: 'center', color: '#757575'}}></Paper>
+                    </Grid>
                 </Grid>
-                <Grid item xs={6}>
-                    <Paper style={{padding: '16px', textAlign: 'center', color: '#757575', boxShadow: 3}}></Paper>
-                </Grid>
-                <Grid item xs={6}>
-                    <Paper style={{padding: '16px', textAlign: 'center', color: '#757575'}}></Paper>
-                </Grid>
-            </Grid>
-        </div>);
+            </div>);
     } else {
         return <Circular/>
     }

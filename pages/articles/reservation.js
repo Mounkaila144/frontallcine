@@ -174,7 +174,7 @@ export default function Reservation() {
                                                 key={articles.id}
                                                 sx={{'&:last-child td, &:last-child th': {border: 0}}}
                                             >
-                                                <TableCell> <img 
+                                                <TableCell> <Image 
                                                     src={url + "/storage/article/" + articles.image}
                                                     width={50} height={50} style={{borderRadius: 8}}
                                                     alt={"image"}/></TableCell>
@@ -254,7 +254,7 @@ export default function Reservation() {
                                                     key={articles.id}
                                                     sx={{'&:last-child td, &:last-child th': {border: 0}}}
                                                 >
-                                                    <TableCell> <img 
+                                                    <TableCell> <Image 
                                                         src={url + "/storage/article/" + articles.image}
                                                         width={50} height={50} style={{borderRadius: 8}}
                                                         alt={"image"}/></TableCell>
